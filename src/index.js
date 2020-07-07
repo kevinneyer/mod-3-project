@@ -1,18 +1,28 @@
-const COCKTAIL_URL = "http://localhost:3000/cocktail_ingredients"
+const COCKTAILINGREDIENT_URL = "http://localhost:3000/cocktail_ingredients"
+const COCKTAILS = "http://localhost:3000/cocktails"
 
-fetch(COCKTAIL_URL)
+// fetch(COCKTAILS)
+// .then(response => response.json())
+// .then(data => {
+//   console.log(data)
+//   data.forEach(cocktail => {
+//     renderCocktail(cocktail)
+//   })
+//   // data.forEach(cocktailIngredient => {
+//   //   console.log(cocktailIngredient.cocktail)
+//   //   // renderCocktail(cocktailIngredient.cocktail)
+//   //   }) 
+// })
+
+fetch(COCKTAILINGREDIENT_URL)
 .then(response => response.json())
 .then(data => {
-  data.map(cocktailIngredient => {
+  console.log(data)
+  data.forEach(cocktailIngredient => {
     console.log(cocktailIngredient.cocktail)
+    // renderCocktail(cocktailIngredient.cocktail)
     }) 
 })
-  // cocktails => {
-    // cocktails.forEach(cocktail => {
-    //   console.log(cocktail)
-    //     renderCocktail(cocktail)
-    //     renderIngredients(cocktail)
-    //     })
     
 
 function renderCocktail(cocktail){
