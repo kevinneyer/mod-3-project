@@ -1,28 +1,24 @@
 const COCKTAILINGREDIENT_URL = "http://localhost:3000/cocktail_ingredients"
 const COCKTAILS = "http://localhost:3000/cocktails"
 
-// fetch(COCKTAILS)
-// .then(response => response.json())
-// .then(data => {
-//   console.log(data)
-//   data.forEach(cocktail => {
-//     renderCocktail(cocktail)
-//   })
-//   // data.forEach(cocktailIngredient => {
-//   //   console.log(cocktailIngredient.cocktail)
-//   //   // renderCocktail(cocktailIngredient.cocktail)
-//   //   }) 
-// })
+document.addEventListener("DOMContentLoaded", function(){
+  fetchUp()
+  clickHandler()
+})
 
-fetch(COCKTAILINGREDIENT_URL)
+function fetchUp(){
+fetch("http://localhost:3000/cocktails")
 .then(response => response.json())
 .then(data => {
-  console.log(data)
-  data.forEach(cocktailIngredient => {
-    console.log(cocktailIngredient.cocktail)
-    // renderCocktail(cocktailIngredient.cocktail)
-    }) 
-})
+  data.forEach(cocktail => {
+    console.log(cocktail)
+    renderCocktail(cocktail)
+    console.log(cocktail.ingredients)
+    renderIngredients(cocktail)
+    })
+  })
+}
+
     
 
 function renderCocktail(cocktail){
@@ -34,21 +30,18 @@ function renderCocktail(cocktail){
     <div class="card-body">
       <h5 class="card-title">${cocktail.bio}</h5>
     </div>
-    <img class="drink-img" style="height: 200px; width: 50%; display: block;" src=${cocktail.image}>
+    <img class="drink-img" style="height: 200px; width: 27%; display: block;" src=${cocktail.image}>
     <div class="card-body">
       <p class="card-text">Ingredients</p>
     </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">1</li>
-      <li class="list-group-item">2</li>
-      <li class="list-group-item">3</li>
+    <ul id=${cocktail.id} class="list-group list-group-flush">
     </ul>
     <div class="card-body">
-      <a href="#" class="card-link">Upvote</a>
-      <a href="#" class="card-link">Downvote</a>
-    </div>
+      <button type="button" id="upvote" class="btn btn-outline-secondary">Upvote</button>
+      <button type="button" id="downvote" class="btn btn-outline-secondary">Downvote</button>
+     </div>
     <div class="card-footer text-muted">
-      2 days ago
+      ${cocktail.likes} likes
     </div>
   </div>
   <div class="card">
@@ -67,7 +60,7 @@ function renderCocktail(cocktail){
 
 function renderIngredients(cocktail) {
   cocktail.ingredients.forEach(ingredient => {
-    let ingredientUl = document.querySelector("body > main > div.cards > div:nth-child(1) > ul")
+    let ingredientUl = document.getElementById(`${cocktail.id}`)
     let ingredientLi = document.createElement("li")
     ingredientLi.className = "list-group-item"
     ingredientLi.innerText = `${ingredient.name} - ${ingredient.amount}`
@@ -75,6 +68,51 @@ function renderIngredients(cocktail) {
   })
 }
 
+function clickHandler() {
+  document.addEventListener("click", function(e) {
+    if (e.target.id === "upvote") {
+      let upvote = e.target
+      let cocktailId = parseInt(upvote.parentNode.parentNode.childNodes[9].id)
+      let likesSpan = upvote.parentNode.parentNode.childNodes[13]
+      let likes = parseInt(likesSpan.innerText) + 1
+      
+      let configObj = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }, body: JSON.stringify({"likes": likes})
+      }
+      fetch(`http://localhost:3000/cocktails/${cocktailId}`, configObj)
+      .then(response => response.json())
+      .then(
+        likesSpan.innerText = `${likes} likes`
+      ).catch(console.log)
+    }
+    else if (e.target.id === "downvote") {
+      console.log(e.target)
+      let downvote = e.target
+        let cocktailId = parseInt(downvote.parentNode.parentNode.childNodes[9].id)
+        let likesSpan = downvote.parentNode.parentNode.childNodes[13]
+        let likes = parseInt(likesSpan.innerText) - 1
+        
+        let configObj = {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          }, body: JSON.stringify({"likes": likes})
+        }
+        fetch(`http://localhost:3000/cocktails/${cocktailId}`, configObj)
+        .then(response => response.json())
+        .then(
+          likesSpan.innerText = `${likes} likes`
+        ).catch(console.log)
+    }
+  })
+        
+      
+}
 
 
 
