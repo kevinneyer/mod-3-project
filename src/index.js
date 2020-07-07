@@ -1,18 +1,25 @@
 const COCKTAIL_URL = "http://localhost:3000/cocktail_ingredients"
 
-fetch(COCKTAIL_URL)
+document.addEventListener("DOMContentLoaded", function(){
+  fetchUp()
+})
+
+function fetchUp(){
+fetch("http://localhost:3000/cocktails")
 .then(response => response.json())
 .then(data => {
-  data.map(cocktailIngredient => {
-    console.log(cocktailIngredient.cocktail)
-    }) 
+  // console.log(data)
+  data.forEach(cocktail => {
+    // console.log(cocktailIngredient.cocktail)
+    renderCocktail(cocktail)
+    console.log(cocktail.ingredients)
+    cocktail.ingredients.forEach(ingredient => {
+      renderIngredients(ingredient)
+    })
+  })
 })
-  // cocktails => {
-    // cocktails.forEach(cocktail => {
-    //   console.log(cocktail)
-    //     renderCocktail(cocktail)
-    //     renderIngredients(cocktail)
-    //     })
+
+}
     
 
 function renderCocktail(cocktail){
@@ -24,7 +31,7 @@ function renderCocktail(cocktail){
     <div class="card-body">
       <h5 class="card-title">${cocktail.bio}</h5>
     </div>
-    <img class="drink-img" style="height: 200px; width: 50%; display: block;" src=${cocktail.image}>
+    <img class="drink-img" style="height: 200px; width: 27%; display: block;" src=${cocktail.image}>
     <div class="card-body">
       <p class="card-text">Ingredients</p>
     </div>
@@ -34,9 +41,9 @@ function renderCocktail(cocktail){
       <li class="list-group-item">3</li>
     </ul>
     <div class="card-body">
-      <a href="#" class="card-link">Upvote</a>
-      <a href="#" class="card-link">Downvote</a>
-    </div>
+      <button type="button" class="btn btn-outline-secondary">Upvote</button>
+      <button type="button" class="btn btn-outline-secondary">Downvote</button>
+     </div>
     <div class="card-footer text-muted">
       2 days ago
     </div>
@@ -55,17 +62,18 @@ function renderCocktail(cocktail){
     cards.append(cocktailCard)
 }
 
-function renderIngredients(cocktail) {
-  cocktail.ingredients.forEach(ingredient => {
-    let ingredientUl = document.querySelector("body > main > div.cards > div:nth-child(1) > ul")
+function renderIngredients(ingredient) {
+
+    let ingredientUl = document.querySelector('body > main > div.cards > div:nth-child(1) > ul')
     let ingredientLi = document.createElement("li")
     ingredientLi.className = "list-group-item"
     ingredientLi.innerText = `${ingredient.name} - ${ingredient.amount}`
     ingredientUl.append(ingredientLi)
-  })
+
+ 
 }
 
-
+   
 
 
 
