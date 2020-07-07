@@ -8,3 +8,15 @@ img {
     margin-right: auto;
     width: 50%;
   }
+
+.my-4 {
+    display: inline-block;
+    left-margin: auto;
+    right-margin: auto;
+    content-align: center;
+}
+
+.form-control {
+    display: inline-block;
+    text-align: center;
+}
