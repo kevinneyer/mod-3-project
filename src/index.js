@@ -4,6 +4,7 @@ const COCKTAILS = "http://localhost:3000/cocktails"
 document.addEventListener("DOMContentLoaded", function(){
   fetchUp()
   clickHandler()
+  toggleForm()
 })
 
 function fetchUp(){
@@ -63,7 +64,7 @@ function renderIngredients(cocktail) {
     let ingredientUl = document.getElementById(`${cocktail.id}`)
     let ingredientLi = document.createElement("li")
     ingredientLi.className = "list-group-item"
-    ingredientLi.innerText = `${ingredient.name} - ${ingredient.amount}`
+    ingredientLi.innerText = `${ingredient.name}`
     ingredientUl.append(ingredientLi)
   })
 }
@@ -75,7 +76,6 @@ function clickHandler() {
       let cocktailId = parseInt(upvote.parentNode.parentNode.childNodes[9].id)  
       let likesSpan = upvote.parentNode.parentNode.childNodes[13]
       let likes = parseInt(likesSpan.innerText) + 1   
-      
       
       let drinkLikes = {
         "likes": likes
@@ -124,63 +124,108 @@ function clickHandler() {
     })
 }
 
-document.addEventListener("click", function(e) {
-  if (e.target.id === "create") {
+function toggleForm() {
+  document.addEventListener("click", function(e) {
+    if (e.target.id === "create") {
+      e.preventDefault()
+      let button = e.target
+      console.log(e.target)
+      let formHolder = document.querySelector(".my-4")
+      formHolder.style.height = "auto"
+      let form = document.createElement("form")
+      form.className = "drink-form"
+      form.innerHTML = `
+    <fieldset>
+    <legend>Let's mix!</legend>
+    <div class="form-group">
+    <label for="name">Drink</label>
+    <input type="text" name="name" class="form-control" id="DrinkName" aria-describedby="emailHelp" placeholder="What do you call your cocktail?">
+    </div>
+    <div class="form-group">
+    <label for="Ingredient1">First Ingredient</label>
+    <input type="text" name="ingredient1" class="form-control" id="Ingredient1" aria-describedby="emailHelp" placeholder="First ingredient...">
+    </div>
+    <div class="form-group">
+    <label for="Ingredient2">Second Ingredient</label>
+    <input type="text" name="ingredient2" class="form-control" id="Ingredient2" aria-describedby="emailHelp" placeholder="Second ingredient...">
+    </div>
+    <div class="form-group">
+    <label for="Ingredient3">Third Ingredient</label>
+    <input type="text" name="ingredient3" class="form-control" id="Ingredient3" aria-describedby="emailHelp" placeholder="Third ingredient...">
+    </div>
+    <div class="form-group">
+    <label for="exampleTextarea">Bio</label>
+    <small id="emailHelp" class="form-text text-muted">Short and sweet.</small>
+    <input type="textarea" name="bio" class="form-control" id="bio" rows="3">
+    </div>
+    <div class="form-group">
+    <label for="Image">Image Link</label>
+    <input type="text" name="image" class="form-control" id="image" aria-describedby="emailHelp" placeholder="Image URL">
+    <small id="emailHelp" class="form-text text-muted">Click below to see your creation.</small>
+    </div>
+    </fieldset>
+    <fieldset>
+    <input type="submit" class="btn btn-primary" value="Submit"></input>
+    </fieldset>
+      `
+      formHolder.append(form)
+      button.innerText = "Hide Menu"
+      button.id = "hide-menu"
+    }
+    else if (e.target.id === "hide-menu") {
+      e.preventDefault()
+      let button = e.target
+      console.log(button)
+      button.innerText = "Create"
+      button.id = "create"
+      let form = document.querySelector(".drink-form")
+      form.remove()
+    }
+  })
+}
+
+
+
+document.addEventListener("submit", function(e) {
     e.preventDefault()
-    let button = e.target
-    console.log(e.target)
-    let formHolder = document.querySelector(".my-4")
-    formHolder.style.height = "auto"
-    let form = document.createElement("form")
-    form.className = "drink-form"
-    form.innerHTML = `
-  <fieldset>
-  <legend>Let's mix!</legend>
-  <div class="form-group">
-  <label for="Name">Drink</label>
-  <input type="email" class="form-control" id="DrinkName" aria-describedby="emailHelp" placeholder="What do you call your cocktail?">
-  </div>
-  <div class="form-group">
-  <label for="Ingredient1">First Ingredient</label>
-  <input type="Ingredient1" class="form-control" id="Ingredient1" aria-describedby="emailHelp" placeholder="First ingredient...">
-  </div>
-  <div class="form-group">
-  <label for="Ingredient2">Second Ingredient</label>
-  <input type="Ingredient2" class="form-control" id="Ingredient2" aria-describedby="emailHelp" placeholder="Second ingredient...">
-  </div>
-  <div class="form-group">
-  <label for="Ingredient3">Third Ingredient</label>
-  <input type="Ingredient3" class="form-control" id="Ingredient3" aria-describedby="emailHelp" placeholder="Third ingredient...">
-  </div>
-  <div class="form-group">
-  <label for="exampleTextarea">Bio</label>
-  <small id="emailHelp" class="form-text text-muted">Short and sweet.</small>
-  <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-  </div>
-  <div class="form-group">
-  <label for="exampleInputFile">Upload Image</label>
-  <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-  <small id="fileHelp" class="form-text text-muted">Click below to see your creation.</small>
-  </div>
-  </fieldset>
-  <fieldset>
-  <button type="submit" class="btn btn-primary">Submit</button>
-  </fieldset>
-    `
-    formHolder.append(form)
-    button.innerText = "Hide Menu"
-    button.id = "hide-menu"
-  }
-  else if (e.target.id === "hide-menu") {
-    e.preventDefault()
-    let button = e.target
-    console.log(button)
-    button.innerText = "Create"
-    button.id = "create"
+    console.log("success")
+    let name = document.querySelector("input#DrinkName").value
+    let ingredients = []
+    let ingredient1 = document.querySelector("input#Ingredient1.value")
+    ingredients.push(ingredient1)
+    let ingredient2 = document.querySelector("input#Ingredient2.value")
+    ingredients.push(ingredient2)
+    let ingredient3 = document.querySelector("input#Ingredient3.value")
+    ingredients.push(ingredient3)
+    let image = document.querySelector("input#image.value")
+    let bio = document.querySelector("input#bio")
+    
+    let newCocktail = {
+      name: name,
+      ingredients: ingredients,
+      image: image,
+      bio: bio
+    }
+    
+    let configObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }, body: JSON.stringify(newCocktail)
+    }
+
+    fetch(COCKTAILS, configObj)
+    .then(response => response.json())
+    .then(cocktail => {
+      console.log(cocktail)
+      renderCocktail(cocktail)
+    })
     let form = document.querySelector(".drink-form")
-    form.remove()
-  }
+    form.reset()
 })
+
+
 
 
 
