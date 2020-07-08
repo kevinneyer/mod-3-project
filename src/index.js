@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function(){
   fetchUp()
   clickHandler()
   toggleForm()
+  submitForm()
 })
 
 function fetchUp(){
@@ -40,7 +41,8 @@ function renderCocktail(cocktail){
     <div class="card-body">
       <button type="button" id="upvote" class="btn btn-outline-secondary">Upvote</button>
       <button type="button" id="downvote" class="btn btn-outline-secondary">Downvote</button>
-     </div>
+      <button type="button" id="delete" class="btn btn-outline-danger">Delete</button>
+      </div>
     <div class="card-footer text-muted">
       ${cocktail.likes} likes
     </div>
@@ -48,15 +50,24 @@ function renderCocktail(cocktail){
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Comments</h4>
-      <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+      <h6 id="comment-container" class="card-subtitle mb-2 text-muted">Let us know what you think.</h6>
       <p class="card-text">Sample Comments</p>
       <p class="card-text">Sample Comments</p>
       <p class="card-text">Sample Comments</p>
-      <a href="#" class="card-link">Card link</a>
-      <a href="#" class="card-link">Another link</a>
+      <div class="form-group">
+      <input type="text" name="comment" class="form-control" id="submit-comment" aria-describedby="emailHelp" placeholder="New Comment">
+      <input id="submit-comment" type="submit" class="btn btn-primary" value="Submit"></input>
+    </div>
     </div>
     `
     cards.prepend(cocktailCard)
+}
+
+function renderComment(drinkComment) {
+  let commentContainer = document.querySelector("#comment-container")
+  let comment = document.createElement("p")
+  comment.className = "card-text"
+  comment.innerText= drinkComment
 }
 
 function renderIngredients(cocktail) {
@@ -121,6 +132,26 @@ function clickHandler() {
           console.log("error", error)
         })
     }
+    else if (e.target.id === "delete") {
+      let deleteBtn = e.target
+      let cocktail = e.target.parentNode.parentNode
+      let cocktailId = parseInt(deleteBtn.parentNode.parentNode.childNodes[9].id)
+      cocktail.remove()
+      let configObj = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }
+      }
+
+      fetch(`http://localhost:3000/cocktails/${cocktailId}`, configObj)
+      .then(response => response.json())
+      .then(console.log)
+      .catch(error => {
+        console.log("error", error)
+      })
+    }
     })
 }
 
@@ -165,7 +196,7 @@ function toggleForm() {
     </div>
     </fieldset>
     <fieldset>
-    <input type="submit" class="btn btn-primary" value="Submit"></input>
+    <input id="submit-drink" type="submit" class="btn btn-primary" value="Submit"></input>
     </fieldset>
       `
       formHolder.append(form)
@@ -185,8 +216,8 @@ function toggleForm() {
 }
 
 
-
-document.addEventListener("submit", function(e) {
+function submitForm() {
+  document.addEventListener("submit", function(e) {
     e.preventDefault()
     console.log("success")
     let name = document.querySelector("input#DrinkName").value
@@ -223,8 +254,15 @@ document.addEventListener("submit", function(e) {
       renderIngredients(cocktail)
     })
     let form = document.querySelector(".drink-form")
-    form.reset()
+    form.remove()
+    let button = document.querySelector("#hide-menu")
+    button.innerText = "Create"
+    button.id = "create"
 })
+
+
+}
+
 
 
 
