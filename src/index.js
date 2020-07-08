@@ -56,7 +56,7 @@ function renderCocktail(cocktail){
       <a href="#" class="card-link">Another link</a>
     </div>
     `
-    cards.append(cocktailCard)
+    cards.prepend(cocktailCard)
 }
 
 function renderIngredients(cocktail) {
@@ -191,14 +191,14 @@ document.addEventListener("submit", function(e) {
     console.log("success")
     let name = document.querySelector("input#DrinkName").value
     let ingredients = []
-    let ingredient1 = document.querySelector("input#Ingredient1.value")
+    let ingredient1 = document.querySelector("input#Ingredient1").value
     ingredients.push(ingredient1)
-    let ingredient2 = document.querySelector("input#Ingredient2.value")
+    let ingredient2 = document.querySelector("input#Ingredient2").value
     ingredients.push(ingredient2)
-    let ingredient3 = document.querySelector("input#Ingredient3.value")
+    let ingredient3 = document.querySelector("input#Ingredient3").value
     ingredients.push(ingredient3)
-    let image = document.querySelector("input#image.value")
-    let bio = document.querySelector("input#bio")
+    let image = document.querySelector("input#image").value
+    let bio = document.querySelector("input#bio").value
     
     let newCocktail = {
       name: name,
@@ -218,13 +218,13 @@ document.addEventListener("submit", function(e) {
     fetch(COCKTAILS, configObj)
     .then(response => response.json())
     .then(cocktail => {
-      console.log(cocktail)
+      console.log(newCocktail)
       renderCocktail(cocktail)
+      renderIngredients(cocktail)
     })
     let form = document.querySelector(".drink-form")
     form.reset()
 })
-
 
 
 
