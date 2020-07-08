@@ -121,51 +121,67 @@ function clickHandler() {
           console.log("error", error)
         })
     }
-      else if (e.target.id === "create") {
-        e.preventDefault()
-        console.log(e.target)
-        let formHolder = document.querySelector(".my-4")
-        formHolder.style.height = "auto"
-        let form = document.createElement("form")
-        form.className = "drink-form"
-        form.innerHTML = `
-  <fieldset>
-    <legend>Let's mix!</legend>
-    <div class="form-group">
-      <label for="Name">Drink</label>
-      <input type="email" class="form-control" id="DrinkName" aria-describedby="emailHelp" placeholder="What do you call your cocktail?">
-    </div>
-    <div class="form-group">
-      <label for="Ingredient1">First Ingredient</label>
-      <input type="Ingredient1" class="form-control" id="Ingredient1" aria-describedby="emailHelp" placeholder="First ingredient...">
-    </div>
-    <div class="form-group">
-    <label for="Ingredient2">Second Ingredient</label>
-    <input type="Ingredient2" class="form-control" id="Ingredient2" aria-describedby="emailHelp" placeholder="Second ingredient...">
-  </div>
-  <div class="form-group">
-      <label for="Ingredient3">Third Ingredient</label>
-      <input type="Ingredient3" class="form-control" id="Ingredient3" aria-describedby="emailHelp" placeholder="Third ingredient...">
-    </div>
-    <div class="form-group">
-      <label for="exampleTextarea">Bio</label>
-      <small id="emailHelp" class="form-text text-muted">Short and sweet.</small>
-      <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="exampleInputFile">Upload Image</label>
-      <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-      <small id="fileHelp" class="form-text text-muted">Click below to see your creation.</small>
-    </div>
-    </fieldset>
-    <fieldset>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </fieldset>
-        `
-        formHolder.append(form)
-      }
     })
 }
+
+document.addEventListener("click", function(e) {
+  if (e.target.id === "create") {
+    e.preventDefault()
+    let button = e.target
+    console.log(e.target)
+    let formHolder = document.querySelector(".my-4")
+    formHolder.style.height = "auto"
+    let form = document.createElement("form")
+    form.className = "drink-form"
+    form.innerHTML = `
+  <fieldset>
+  <legend>Let's mix!</legend>
+  <div class="form-group">
+  <label for="Name">Drink</label>
+  <input type="email" class="form-control" id="DrinkName" aria-describedby="emailHelp" placeholder="What do you call your cocktail?">
+  </div>
+  <div class="form-group">
+  <label for="Ingredient1">First Ingredient</label>
+  <input type="Ingredient1" class="form-control" id="Ingredient1" aria-describedby="emailHelp" placeholder="First ingredient...">
+  </div>
+  <div class="form-group">
+  <label for="Ingredient2">Second Ingredient</label>
+  <input type="Ingredient2" class="form-control" id="Ingredient2" aria-describedby="emailHelp" placeholder="Second ingredient...">
+  </div>
+  <div class="form-group">
+  <label for="Ingredient3">Third Ingredient</label>
+  <input type="Ingredient3" class="form-control" id="Ingredient3" aria-describedby="emailHelp" placeholder="Third ingredient...">
+  </div>
+  <div class="form-group">
+  <label for="exampleTextarea">Bio</label>
+  <small id="emailHelp" class="form-text text-muted">Short and sweet.</small>
+  <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+  <label for="exampleInputFile">Upload Image</label>
+  <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+  <small id="fileHelp" class="form-text text-muted">Click below to see your creation.</small>
+  </div>
+  </fieldset>
+  <fieldset>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  </fieldset>
+    `
+    formHolder.append(form)
+    button.innerText = "Hide Menu"
+    button.id = "hide-menu"
+  }
+  else if (e.target.id === "hide-menu") {
+    e.preventDefault()
+    let button = e.target
+    console.log(button)
+    button.innerText = "Create"
+    button.id = "create"
+    let form = document.querySelector(".drink-form")
+    form.remove()
+  }
+})
+
 
 
 
