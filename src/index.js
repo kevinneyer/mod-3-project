@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function(){
   clickHandler()
   toggleForm()
   submitForm()
+  submitComment()
 })
 
 function fetchUp(){
@@ -51,24 +52,18 @@ function renderCocktail(cocktail){
     <div class="card-body">
       <h4 class="card-title">Comments</h4>
       <h6 id="comment-container" class="card-subtitle mb-2 text-muted">Let us know what you think.</h6>
-      <p class="card-text">Sample Comments</p>
-      <p class="card-text">Sample Comments</p>
-      <p class="card-text">Sample Comments</p>
+      <form id="comment-form">
       <div class="form-group">
-      <input type="text" name="comment" class="form-control" id="submit-comment" aria-describedby="emailHelp" placeholder="New Comment">
+      <input type="text" name="comment" class="form-control" aria-describedby="emailHelp" placeholder="New Comment">
       <input id="submit-comment" type="submit" class="btn btn-primary" value="Submit"></input>
-    </div>
+      </div>
+      </form>
     </div>
     `
     cards.prepend(cocktailCard)
 }
 
-function renderComment(drinkComment) {
-  let commentContainer = document.querySelector("#comment-container")
-  let comment = document.createElement("p")
-  comment.className = "card-text"
-  comment.innerText= drinkComment
-}
+
 
 function renderIngredients(cocktail) {
   cocktail.ingredients.forEach(ingredient => {
@@ -164,7 +159,7 @@ function toggleForm() {
       let formHolder = document.querySelector(".my-4")
       formHolder.style.height = "auto"
       let form = document.createElement("form")
-      form.className = "drink-form"
+      form.id = "drink-form"
       form.innerHTML = `
     <fieldset>
     <legend>Let's mix!</legend>
@@ -218,7 +213,8 @@ function toggleForm() {
 
 function submitForm() {
   document.addEventListener("submit", function(e) {
-    e.preventDefault()
+    if (e.target.id === "drink-form"){
+      e.preventDefault()
     console.log("success")
     let name = document.querySelector("input#DrinkName").value
     let ingredients = []
@@ -253,16 +249,59 @@ function submitForm() {
       renderCocktail(cocktail)
       renderIngredients(cocktail)
     })
-    let form = document.querySelector(".drink-form")
+    let form = document.querySelector("#drink-form")
     form.remove()
     let button = document.querySelector("#hide-menu")
     button.innerText = "Create"
     button.id = "create"
+  }
 })
 
 
 }
 
+function submitComment(){
+  let commentForm = document.querySelector('#comment-form')
+   document.addEventListener('submit', function(e){
+    console.log(e)
+    if (e.target.id === "comment-form"){
+      e.preventDefault()
+      let cocktailId = e.target.parentNode.parentNode.parentNode.childNodes[9].id 
+      // let drinkComment = document.querySelectorAll("input")[1].value
+      
+      let drinkComment = e.target.parentNode.childNodes[5][0].value     
+      // let container = e.target.parentNode.childNodes[2].parentNode
+      // container.append(drinkComment)
+      let newComment = {comment: drinkComment}
+
+      let configObj =  {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }, body: JSON.stringify(newComment)
+      }
+
+      fetch(`http://localhost:3000/cocktails/comments/${cocktailId}`, configObj)
+      .then(response => response.json())
+      .then( cocktail=> {
+        drinkComment = cocktail.comments
+        console.log(drinkComment)
+        renderComment(drinkComment)
+      })
+
+    }
+  })
+}
+
+function renderComment(drinkComment) {
+  let commentContainer = document.querySelector("#comment-container")
+  // let commentContainer = 
+  let comment = document.createElement("p")
+  comment.className = "card-text"
+  comment.innerText= drinkComment
+  commentContainer.append(comment)
+}
 
 
 
