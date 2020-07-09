@@ -14,10 +14,10 @@ fetch("http://localhost:3000/cocktails")
 .then(response => response.json())
 .then(data => {
   data.forEach(cocktail => {
-    console.log(cocktail)
     renderCocktail(cocktail)
-    console.log(cocktail.ingredients)
     renderIngredients(cocktail)
+    console.log(cocktail.comments)
+    renderComments(cocktail)
     })
   })
 }
@@ -54,7 +54,7 @@ function renderCocktail(cocktail){
       <h6 id="comment-container" class="card-subtitle mb-2 text-muted">Let us know what you think.</h6>
       <form id="comment-form">
       <div class="form-group">
-      <input type="text" name="comment" class="form-control" aria-describedby="emailHelp" placeholder="New Comment">
+      <input id="new-comment" type="text" name="comment" class="form-control" aria-describedby="emailHelp" placeholder="New Comment">
       <input id="submit-comment" type="submit" class="btn btn-primary" value="Submit"></input>
       </div>
       </form>
@@ -260,20 +260,14 @@ function submitForm() {
 
 }
 
-function submitComment(){
-  let commentForm = document.querySelector('#comment-form')
+function submitComment() {
    document.addEventListener('submit', function(e){
-    console.log(e)
     if (e.target.id === "comment-form"){
       e.preventDefault()
-      let cocktailId = e.target.parentNode.parentNode.parentNode.childNodes[9].id 
-      // let drinkComment = document.querySelectorAll("input")[1].value
-      
+      let cocktailId = parseInt(e.target.parentNode.parentNode.parentNode.childNodes[9].id) 
       let drinkComment = e.target.parentNode.childNodes[5][0].value     
-      // let container = e.target.parentNode.childNodes[2].parentNode
-      // container.append(drinkComment)
       let newComment = {comment: drinkComment}
-
+      
       let configObj =  {
         method: "PATCH",
         headers: {
@@ -282,25 +276,43 @@ function submitComment(){
         }, body: JSON.stringify(newComment)
       }
 
-      fetch(`http://localhost:3000/cocktails/comments/${cocktailId}`, configObj)
+      fetch(`http://localhost:3000/cocktails/${cocktailId}`, configObj)
       .then(response => response.json())
-      .then( cocktail=> {
-        drinkComment = cocktail.comments
-        console.log(drinkComment)
-        renderComment(drinkComment)
+      .then(cocktail => {
+        console.log(cocktail)
+        renderComment(cocktail)
+        let cocktailCard = document.getElementById(`${cocktail.id}`)
+        let input = cocktailCard.parentNode.childNodes[15].childNodes[1].childNodes[5].childNodes[1].childNodes[1]
+        input.value = " "
       })
-
     }
   })
 }
 
-function renderComment(drinkComment) {
-  let commentContainer = document.querySelector("#comment-container")
-  // let commentContainer = 
-  let comment = document.createElement("p")
-  comment.className = "card-text"
-  comment.innerText= drinkComment
-  commentContainer.append(comment)
+function renderComments(cocktail) {
+  let cocktailCard = document.getElementById(`${cocktail.id}`)
+  let commentContainer = cocktailCard.parentNode.childNodes[15].childNodes[1].children[1]
+  cocktail.comments.forEach(comment => {
+      let commentP = document.createElement("p")
+      commentP.className = "card-text"
+      if (comment.content !== false) {
+        commentP.innerText = comment.content
+        commentContainer.append(commentP)
+    }
+  }) 
+}
+
+function renderComment(cocktail) {
+  let cocktailCard = document.getElementById(`${cocktail.id}`)
+  let commentContainer = cocktailCard.parentNode.childNodes[15].childNodes[1].children[1]
+  
+  let comment = cocktail.comments[cocktail.comments.length - 1]
+  let commentP = document.createElement("p")
+  commentP.className = "card-text"
+      if (comment.content !== false) {
+        commentP.innerText = comment.content
+        commentContainer.append(commentP)
+    }
 }
 
 
