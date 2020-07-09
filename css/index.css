@@ -25,6 +25,12 @@ img {
     margin-top: 10px;
 }
 
-.card-text {
+.card-text-1 {
     margin-top: 10px;
+    color: #DAA520; 
 }
+
+.jumbotron {
+    margin-bottom: -70px;
+}
+
