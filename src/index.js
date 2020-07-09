@@ -204,7 +204,7 @@ function toggleForm() {
       console.log(button)
       button.innerText = "Create"
       button.id = "create"
-      let form = document.querySelector(".drink-form")
+      let form = document.querySelector("#drink-form")
       form.remove()
     }
   })
@@ -294,7 +294,7 @@ function renderComments(cocktail) {
   let commentContainer = cocktailCard.parentNode.childNodes[15].childNodes[1].children[1]
   cocktail.comments.forEach(comment => {
       let commentP = document.createElement("p")
-      commentP.className = "card-text"
+      commentP.className = "card-text-1"
       if (comment.content !== false) {
         commentP.innerText = comment.content
         commentContainer.append(commentP)
@@ -308,7 +308,7 @@ function renderComment(cocktail) {
   
   let comment = cocktail.comments[cocktail.comments.length - 1]
   let commentP = document.createElement("p")
-  commentP.className = "card-text"
+  commentP.className = "card-text-1"
       if (comment.content !== false) {
         commentP.innerText = comment.content
         commentContainer.append(commentP)
