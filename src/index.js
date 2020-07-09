@@ -93,7 +93,7 @@ function clickHandler() {
           "Accept": "application/json"
         }, body: JSON.stringify(drinkLikes)
       }
-      fetch(`http://localhost:3000/cocktails/${cocktailId}`, configObj)
+      fetch(`http://localhost:3000/cocktails/${cocktailId}/likes`, configObj)
       .then(response => response.json())
       .then(data => {
         console.log(data)
@@ -118,7 +118,7 @@ function clickHandler() {
             "Accept": "application/json"
           }, body: JSON.stringify(drinkLikes)
         }
-        fetch(`http://localhost:3000/cocktails/${cocktailId}`, configObj)
+        fetch(`http://localhost:3000/cocktails/${cocktailId}/likes`, configObj)
         .then(response => response.json())
         .then(data => {
           console.log(data)
