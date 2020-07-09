@@ -267,7 +267,11 @@ function submitComment(){
     if (e.target.id === "comment-form"){
       e.preventDefault()
       let cocktailId = e.target.parentNode.parentNode.parentNode.childNodes[9].id 
-      let drinkComment = document.querySelectorAll("input")[1].value     
+      // let drinkComment = document.querySelectorAll("input")[1].value
+      
+      let drinkComment = e.target.parentNode.childNodes[5][0].value     
+      // let container = e.target.parentNode.childNodes[2].parentNode
+      // container.append(drinkComment)
       let newComment = {comment: drinkComment}
 
       let configObj =  {
@@ -292,7 +296,7 @@ function submitComment(){
 
 function renderComment(drinkComment) {
   let commentContainer = document.querySelector("#comment-container")
-  
+  // let commentContainer = 
   let comment = document.createElement("p")
   comment.className = "card-text"
   comment.innerText= drinkComment
