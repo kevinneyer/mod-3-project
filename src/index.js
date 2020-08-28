@@ -209,7 +209,6 @@ function toggleForm() {
   })
 }
 
-
 function submitForm() {
   document.addEventListener("submit", function(e){
     if (e.target.id === "drink-form"){
